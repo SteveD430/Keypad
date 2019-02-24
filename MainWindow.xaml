@@ -1,0 +1,93 @@
+﻿<Window x:Class="Safe.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:safe="clr-namespace:Safe"
+        Title="Safe" Height="527" Width="525">
+     <Window.CommandBindings>
+    <CommandBinding Command="ApplicationCommands.New" Executed="NewCommandExecuted" CanExecute="NewCommandCanExecute" />
+    <CommandBinding Command="ApplicationCommands.Open" Executed="OpenCommandExecuted" CanExecute="OpenCommandCanExecute" />
+    <CommandBinding Command="ApplicationCommands.Close" Executed="CloseCommandExecuted" CanExecute="CloseCommandCanExecute" />
+    <!-- CommandBinding Command="ApplicationCommands.Exit" Executed="ExitCommandExecuted" CanExecute="ExitCommandCanExecute" / -->
+    <CommandBinding Command="ApplicationCommands.Cut" Executed="CutCommandExecuted" CanExecute="CutCommandCanExecute" />
+    <CommandBinding Command="ApplicationCommands.Copy" Executed="CopyCommandExecuted" CanExecute="CopyCommandCanExecute" />
+    <CommandBinding Command="ApplicationCommands.Paste" Executed="PasteCommandExecuted" CanExecute="PasteCommandCanExecute" />
+    <CommandBinding Command="ApplicationCommands.Help" Executed="HelpCommandExecuted" CanExecute="HelpCommandCanExecute" />
+  </Window.CommandBindings>
+ <Window.Resources>
+   <HierarchicalDataTemplate DataType="Accounts" ItemsSource="{Binding XPath=*}">
+      <TextBlock Text="{Binding XPath=@Name}" />
+    </HierarchicalDataTemplate>
+    <!-- Cannot use both DataType and x:Key. If the idea is to have auto Type association then omit the x:Key  -->
+    <HierarchicalDataTemplate DataType="AccountGroup" ItemsSource="{Binding XPath=*}">
+      <StackPanel>
+        <TextBlock Text="{Binding XPath=@Name}"/>
+        <Image Source="{Binding XPath=@Image}"></Image>
+       </StackPanel>
+    </HierarchicalDataTemplate> 
+    <DataTemplate DataType="AccountName" >
+      <StackPanel>
+        <Image Source="{Binding XPath=@Image}"></Image>
+        <Label Content="{Binding XPath=@Name}"></Label>
+      </StackPanel>
+    </DataTemplate>
+    
+    <XmlDataProvider x:Key="dataSource1" Source="c:\users\steve\personal\encodedAccounts.xml" XPath="Accounts"/>
+    <XmlDataProvider x:Key="dataSource2" XPath="Accounts">
+      <x:XData>
+      <Accounts xmlns="" Name="Xml Accounts">
+	<AccountGroup Name="Bank Accounts" Description="Bank Accounts" Image="Images/safe24.bmp">
+		<AccountName Name="Lloyds" Image="Images/safe.jpg" Group="Bank Accounts" />
+		<AccountName Name="Barclays" Image="Images/safe.jpg" Group="Bank Accounts" />
+		<AccountName Name="RBS" Image="Images/safe24.bmp" Group="Bank Accounts" />
+		<AccountName Name="Santander" Image="Images/safe24.bmp" Group="Bank Accounts" />
+	</AccountGroup>
+	<AccountGroup Name="Credit Cards" Description="Credit Cards" Image="Images/safe24.bmp">		
+		<AccountName Name="Master Card" Image="Images/CreditCards/mastercard.gif" Group="Credit Cards" />
+		<AccountName Name="Visa" Image="Images/CreditCards/visa.gif" Group="Credit Cards" />
+		<AccountName Name="Halifax MC" Image="Images/safe24.bmp" Group="Credit Cards" />
+		<AccountName Name="Tesco MC" Image="Images/safe24.bmp" Group="Credit Cards" />
+	</AccountGroup>
+</Accounts>  
+      </x:XData>
+    </XmlDataProvider>
+   </Window.Resources>
+  <DockPanel>
+    <Grid DockPanel.Dock="Top">
+      <Grid.RowDefinitions>
+        <RowDefinition></RowDefinition>
+        <RowDefinition></RowDefinition>
+      </Grid.RowDefinitions>
+      <Menu Grid.Row="0">
+        <MenuItem Header="_File">
+          <MenuItem Command="ApplicationCommands.New" />
+          <MenuItem Command="ApplicationCommands.Open" />
+          <MenuItem Command="ApplicationCommands.Close" />
+          <Separator />
+          <!-- MenuItem Command="ApplicationCommand.Close" / -->
+        </MenuItem>
+        <MenuItem Header ="Edit">
+          <MenuItem Command="ApplicationCommands.Cut" />
+          <MenuItem Command="ApplicationCommands.Copy" />
+          <MenuItem Command="ApplicationCommands.Paste" />
+        </MenuItem>
+         <MenuItem Header ="Help">
+          <MenuItem Command="ApplicationCommands.Help" />
+        </MenuItem>
+      </Menu>
+   <ToolBarTray Grid.Row="1" >
+      <ToolBar Name="File" >
+        <Button Command="New">
+          <Image Source="Images/Toolbar/NewDocumentHS.png" />
+        </Button>
+        <Button Command="Open" Content="Open" />
+        <Button Command="Close" Content="Close" />
+      </ToolBar>
+    </ToolBarTray>
+      </Grid>
+    <Grid>
+      <DataGrid></DataGrid>
+    </Grid>
+    <Grid DockPanel.Dock="Bottom"></Grid>
+  </DockPanel>
+</Window>
